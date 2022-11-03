@@ -6,8 +6,38 @@
 </head>
 <body>
 <div layout:fragment="content">
-
-    <h2 class="pb-2 border-bottom">Menu</h2>
+    <!-- Modal -->
+    <div class="modal fade" id="addMenuItemModal" tabindex="-1" aria-labelledby="addMenuItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addMenuItemModalLabel">Add Menu Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" th:action="@{/menu-items/add}" th:object="${MenuItem}" id="addUserForm">
+                        <label  class="form-label">First and Last name</label>
+                        <div class="mb-3">
+                            <label for="nameField" class="form-label">Name</label>
+                            <input type="text" class="form-control" placeholder="Email" id="nameField" th:field="*{name}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nameField" class="form-label">Price</label>
+                            <input type="number" class="form-control" placeholder="Email" id="priceField" th:field="*{name}" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button onclick="$('#addUserForm').submit()" class="btn btn-primary">Add User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h2 class="pb-2 float-start">Menu Items</h2>
+    <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addMenuItemModal">
+        Add user
+    </button>
     <table class="table table-striped table-hover">
         <thead>
         <tr>

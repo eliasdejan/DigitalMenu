@@ -1,7 +1,9 @@
 package com.eliasdejan.digial_menu.controller;
 
 import com.eliasdejan.digial_menu.model.MenuItem;
+import com.eliasdejan.digial_menu.model.MenuItemType;
 import com.eliasdejan.digial_menu.repository.MenuItemRepository;
+import com.eliasdejan.digial_menu.repository.MenuItemTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +17,12 @@ import javax.validation.Valid;
 public class MenuItemController {
 
     private final MenuItemRepository menuItemRepository;
+    private final MenuItemTypeRepository menuItemTypeRepository;
 
     @Autowired
-    public MenuItemController(MenuItemRepository menuItemRepository) {
+    public MenuItemController(MenuItemRepository menuItemRepository, MenuItemTypeRepository menuItemTypeRepository) {
         this.menuItemRepository = menuItemRepository;
+        this.menuItemTypeRepository = menuItemTypeRepository;
     }
 
     @GetMapping("")
@@ -29,6 +33,11 @@ public class MenuItemController {
 
     @PostMapping("/add")
     public String addMenuItem(@Valid MenuItem menuItem, BindingResult result, Model model) {
+
+        //TODO continuare
+//        menuItemTypeRepository.findById(menuItemTypeId).map(menuItemType -> {
+//            menuItem.setMenuItemType(menuItemType);
+
         if (result.hasErrors()) {
             return "menu-items/index";
         }
@@ -42,20 +51,20 @@ public class MenuItemController {
         MenuItem menuItem = menuItemRepository.findById((int) id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid menu item Id:" + id));
         model.addAttribute("menuItem", menuItem);
-        return "menu-items/edit";
+        return "/menu-items/edit";
     }
 
-    @PostMapping("/update/{id}")
+    @PostMapping("/edit/{id}")
     public String updateMenuItem(@PathVariable("id") long id, @Valid MenuItem menuItem, BindingResult result,
                                 Model model) {
         if (result.hasErrors()) {
             menuItem.setId((int) id);
-            return "menu-items/edit";
+            return "/menu-items/edit";
         }
 
         menuItemRepository.save(menuItem);
         model.addAttribute("menuItems", menuItemRepository.findAll());
-        return "menu-items/index";
+        return "/menu-items/index";
     }
 
     @GetMapping("/delete/{id}")
@@ -64,7 +73,7 @@ public class MenuItemController {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid menu item Id:" + id));
         menuItemRepository.delete(menuItem);
         model.addAttribute("menuItems", menuItemRepository.findAll());
-        return "menu-items/index";
+        return "/menu-items/index";
     }
 
 }

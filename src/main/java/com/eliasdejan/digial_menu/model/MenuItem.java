@@ -50,4 +50,11 @@ public class MenuItem {
         this.price = price;
     }
 
+    public MenuItemType getMenuItemType() {
+        return menuItemType;
+    }
+
+    public void setMenuItemType(MenuItemType menuItemType) {
+        this.menuItemType = menuItemType;
+    }
 }
