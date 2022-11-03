@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Menu</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <h2 class="pb-2 border-bottom">Menu</h2>
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+        </tr>
+        </thead>
+        <tr th:each="menuItem: ${menuItems}">
+            <td th:text="${menuItem.id}" />
+            <td th:text="${menuItem.name}" />
+            <td th:text="${menuItem.price} + ' lei'" />
+        </tr>
+    </table>
+
+</div>
+</body>
+</html>

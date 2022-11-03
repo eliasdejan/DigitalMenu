@@ -1,4 +1,4 @@
-package com.eliasdejan.digial_menu;
+package com.eliasdejan.digial_menu.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MainController {
     @GetMapping("")
     public String showHomePage(){
-        return "index";
+        return "redirect:menu-items";
     }
 }

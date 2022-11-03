@@ -1,7 +1,7 @@
 package com.eliasdejan.digial_menu;
 
-import com.eliasdejan.digial_menu.user.User;
-import com.eliasdejan.digial_menu.user.UserRepository;
+import com.eliasdejan.digial_menu.model.User;
+import com.eliasdejan.digial_menu.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.eliasdejan.digial_menu.user;
+package com.eliasdejan.digial_menu.model;
 
 import javax.persistence.*;
 
