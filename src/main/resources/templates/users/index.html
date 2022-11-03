@@ -2,12 +2,47 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/layout}">
 <head>
-    <title>Menu</title>
+    <title>Users</title>
 </head>
 <body>
 <div layout:fragment="content">
-
-    <h2 class="pb-2 border-bottom">Users</h2>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" th:action="@{/users/add}" th:object="${User}" id="addUserForm">
+                        <label  class="form-label">First and Last name</label>
+                        <div class="input-group mb-3">
+                            <input type="text" placeholder="First name" class="form-control" th:field="*{firstName}" required>
+                            <input type="text" placeholder="Last name" class="form-control" th:field="*{lastName}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="emailField" class="form-label">Email address</label>
+                            <input type="email" class="form-control" placeholder="Email" id="emailField" th:field="*{email}" aria-describedby="emailHelp" required>
+                            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="passwordField" class="form-label">Password</label>
+                            <input type="password" class="form-control" placeholder="Password" id="passwordField" th:field="*{password}" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button onclick="$('#addUserForm').submit()" class="btn btn-primary">Add User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h2 class="pb-2 float-start">Users</h2>
+    <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Add user
+    </button>
     <table class="table table-striped table-hover">
         <thead>
             <tr>
@@ -15,6 +50,7 @@
                 <th scope="col">First Name</th>
                 <th scope="col">Last Name</th>
                 <th scope="col">Email</th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
         <tr th:each="user: ${users}">
@@ -22,6 +58,10 @@
             <td th:text="${user.firstName}" />
             <td th:text="${user.lastName}" />
             <td th:text="${user.email}" />
+            <td>
+                <a th:href="@{/users/edit/{id}(id=${user.id})}">Edit</a>
+                <a th:href="@{/users/delete/{id}(id=${user.id})}">Delete</a>
+            </td>
         </tr>
     </table>
 </div>

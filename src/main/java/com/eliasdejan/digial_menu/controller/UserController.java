@@ -27,22 +27,18 @@ public class UserController {
     @GetMapping("")
     public String showUpdateForm(Model model) {
         model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("User", new User());
         return "users/index";
-    }
-
-    @GetMapping("/add")
-    public String showSignUpForm(User user) {
-        return "users/add";
     }
 
     @PostMapping("/add")
     public String addUser(@Valid User user, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "users/add";
+            return "users";
         }
 
         userRepository.save(user);
-        return "redirect:list";
+        return "redirect:/users";
     }
 
     @GetMapping("/edit/{id}")
@@ -51,20 +47,24 @@ public class UserController {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
 
         model.addAttribute("user", user);
-        return "users/edit";
+        return "/users/edit";
     }
 
-    @PostMapping("update/{id}")
+    @PostMapping("edit/{id}")
     public String updateUser(@PathVariable("id") long id, @Valid User user, BindingResult result,
                                 Model model) {
         if (result.hasErrors()) {
             user.setId((int) id);
-            return "users/edit";
+            return "/users/edit/"+id;
         }
 
+        User oldUser = userRepository.findById((int) id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+
+        user.setPassword(oldUser.getPassword());
+
         userRepository.save(user);
-        model.addAttribute("users", userRepository.findAll());
-        return "users/index";
+        return "redirect:/users";
     }
 
     @GetMapping("delete/{id}")
@@ -72,7 +72,6 @@ public class UserController {
         User user = userRepository.findById((int) id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
         userRepository.delete(user);
-        model.addAttribute("users", userRepository.findAll());
-        return "users/index";
+        return "redirect:/users";
     }
 }
