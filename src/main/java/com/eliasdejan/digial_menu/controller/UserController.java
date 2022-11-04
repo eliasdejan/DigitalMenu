@@ -34,7 +34,7 @@ public class UserController {
     @PostMapping("/add")
     public String addUser(@Valid User user, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "users";
+            return "users/index";
         }
 
         userRepository.save(user);

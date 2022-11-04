@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Menu Item Types</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- Modal -->
+    <div class="modal fade" id="addTypeModal" tabindex="-1" aria-labelledby="addTypeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTypeModalLabel">Add Type</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" th:action="@{/menu-item-types/add}" th:object="${MenuItemType}" id="addTypeForm">
+                        <label  class="form-label">Menu Item Type Name</label>
+                        <div class="mb-3">
+                            <label for="nameField" class="form-label">Name</label>
+                            <input type="text" class="form-control" placeholder="Name" id="nameField" th:field="*{name}" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button onclick="$('#addTypeForm').submit()" class="btn btn-primary">Add Menu Item Type</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h2 class="pb-2 float-start">Menu Item Types</h2>
+    <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addTypeModal">
+        Add type
+    </button>
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tr th:each="menuItemType: ${menuItemTypes}">
+            <td th:text="${menuItemType.id}" />
+            <td th:text="${menuItemType.name}" />
+            <td>
+                <a th:href="@{/menu-item-types/edit/{id}(id=${menuItemType.id})}">Edit</a>
+                <a th:href="@{/menu-item-types/delete/{id}(id=${menuItemType.id})}">Delete</a>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

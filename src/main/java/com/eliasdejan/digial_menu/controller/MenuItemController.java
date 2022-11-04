@@ -1,8 +1,6 @@
 package com.eliasdejan.digial_menu.controller;
 
 import com.eliasdejan.digial_menu.model.MenuItem;
-import com.eliasdejan.digial_menu.model.MenuItemType;
-import com.eliasdejan.digial_menu.model.User;
 import com.eliasdejan.digial_menu.repository.MenuItemRepository;
 import com.eliasdejan.digial_menu.repository.MenuItemTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
