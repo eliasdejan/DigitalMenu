@@ -1,10 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Edit user</title>
 </head>
 <body>
+<div layout:fragment="content">
+    <h3>Edit Menu Item</h3>
+    <div class="card">
+        <div class="card-body">
+            <div class="col-md-10">
+                <form action="#" th:action="@{/menu-items/edit/{id}(id=${menuItem.id})}" th:object="${menuItem}" method="post">
+                    <div class="row">
+                        <div class="form-group col-md-8">
+                            <label for="nameField" class="form-label">Name</label>
+                            <input type="text" class="form-control" placeholder="Name" id="nameField" th:field="*{name}" required>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="priceField" class="form-label">Price</label>
+                            <input type="number" class="form-control" placeholder="Price" id="priceField" th:field="*{price}" required>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="typeField" class="form-label">Type</label>
+                            <select class="form-select" id="typeField" th:field="*{menuItemType}">
+                                <option th:each="it : ${menuItemTypes}"
+                                        th:value="${it.id}"
+                                        th:utext="${it.name}"/>
+                            </select>
+                        </div>
 
+                        <div class="col-md-6 mt-2">
+                            <input type="submit" class="btn btn-primary" value="Edit Menu Item">
+                        </div>
+
+                        <div class="form-group col-md-8"></div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
-</html>a
+
+</html>

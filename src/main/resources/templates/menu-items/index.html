@@ -15,28 +15,34 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" th:action="@{/menu-items/add}" th:object="${MenuItem}" id="addUserForm">
-                        <label  class="form-label">First and Last name</label>
+                    <form method="post" th:action="@{/menu-items/add}" th:object="${MenuItem}" id="addMenuItemForm">
                         <div class="mb-3">
                             <label for="nameField" class="form-label">Name</label>
-                            <input type="text" class="form-control" placeholder="Email" id="nameField" th:field="*{name}" required>
+                            <input type="text" class="form-control" placeholder="Name" id="nameField" th:field="*{name}" required>
                         </div>
                         <div class="mb-3">
-                            <label for="nameField" class="form-label">Price</label>
-                            <input type="number" class="form-control" placeholder="Email" id="priceField" th:field="*{name}" required>
+                            <label for="priceField" class="form-label">Price</label>
+                            <input type="number" class="form-control" placeholder="Price" id="priceField" th:field="*{price}" required>
+                        </div>
+                        <div class="mb-3">
+                            <select class="form-select" aria-label="Type" th:field="*{menuItemType}">
+                                <option th:each="it : ${menuItemTypes}"
+                                        th:value="${it.id}"
+                                        th:utext="${it.name}"/>
+                            </select>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button onclick="$('#addUserForm').submit()" class="btn btn-primary">Add User</button>
+                    <button onclick="$('#addMenuItemForm').submit()" class="btn btn-primary">Add Menu Item</button>
                 </div>
             </div>
         </div>
     </div>
     <h2 class="pb-2 float-start">Menu Items</h2>
     <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addMenuItemModal">
-        Add user
+        Add menu item
     </button>
     <table class="table table-striped table-hover">
         <thead>
@@ -44,12 +50,19 @@
             <th scope="col">Id</th>
             <th scope="col">Name</th>
             <th scope="col">Price</th>
+            <th scope="col">Type</th>
+            <th scope="col">Actions</th>
         </tr>
         </thead>
         <tr th:each="menuItem: ${menuItems}">
             <td th:text="${menuItem.id}" />
             <td th:text="${menuItem.name}" />
             <td th:text="${menuItem.price} + ' lei'" />
+            <td th:text="${menuItem.menuItemType.name}" />
+            <td>
+                <a th:href="@{/menu-items/edit/{id}(id=${menuItem.id})}">Edit</a>
+                <a th:href="@{/menu-items/delete/{id}(id=${menuItem.id})}">Delete</a>
+            </td>
         </tr>
     </table>
 
