@@ -22,6 +22,17 @@ public class User {
     @Column(nullable = false, name = "last_name", length = 45)
     private String lastName;
 
+    @Column(nullable = false, name = "is_admin")
+    private boolean isAdmin;
+
+    public boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
     public Integer getId() {
         return id;
     }

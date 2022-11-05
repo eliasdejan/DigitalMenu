@@ -1,10 +1,74 @@
 @import url("https://fonts.googleapis.com/css2?family=Allison&display=swap");
 body {
+  font-family: "Oswald", sans-serif;
   width: 100%;
+  background: #191919;
+  color: white;
 }
 
-.nav .logo {
-  font-family: "Allison", cursive;
+a {
+  color: #A13333;
+}
+a:hover {
+  color: #cc5a5a;
+}
+
+.navbar {
+  background: #A13333 !important;
+}
+
+.navbar-brand {
+  font-family: "Smooch", cursive;
+  font-size: 24pt;
+}
+
+.navbar-nav {
+  align-items: center;
+}
+
+.navbar .navbar-nav .nav-link {
+  color: #fff;
+  font-size: 1.1em;
+  padding: 0.5em 1em;
+}
+
+@media screen and (min-width: 768px) {
+  .navbar-brand img {
+    width: 100px;
+  }
+  .navbar-brand {
+    margin-right: 0;
+    padding: 0 1em;
+  }
+}
+footer {
+  height: 100px;
+  border-top: #A13333 solid 2px;
+  padding-top: 30px;
+  background: #101010;
+  color: #A13333;
+}
+
+table tr, table td {
+  color: white;
+}
+
+.table-striped > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+  color: #ECDBBA;
+}
+
+.btn-primary {
+  background: #A13333 !important;
+  border: none;
+}
+
+.card {
+  background: #1e1e1e;
+}
+
+.modal-content {
+  background: #191919;
 }
 
 /*# sourceMappingURL=style.css.map */

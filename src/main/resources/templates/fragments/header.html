@@ -1,11 +1,26 @@
-<header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom px-4" th:fragment="header">
-  <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-    <li><a th:href="@{/users}" class="nav-link px-2 link-secondary">Users</a></li>
-    <li><a th:href="@{/menu-items}" class="nav-link px-2 link-secondary">Menu</a></li>
-    <li><a th:href="@{/menu-item-types}" class="nav-link px-2 link-secondary">Menu Item Types</a></li>
-  </ul>
-
-  <div class="col-md-3 text-end">
-    <a href="#" class="btn btn-outline-primary disabled me-2" disabled>Login</a>
+<nav class="navbar navbar-expand-md navbar-dark mb-5">
+  <div class="container-fluid">
+    <a class="navbar-brand d-md-none" href="#">
+      <img src="https://codingyaar.com/wp-content/uploads/logo-1.png" alt="">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a th:href="@{/users}" class="nav-link">Users</a>
+        </li>
+        <li class="nav-item">
+          <a th:href="@{/menu-items}" class="nav-link">Menu</a>
+        </li>
+        <a class="navbar-brand d-none d-md-block" href="#">
+          Digital Menu
+        </a>
+        <li class="nav-item">
+          <a th:href="@{/menu-item-types}" class="nav-link">Menu Item Types</a>
+        </li>
+      </ul>
+    </div>
   </div>
-</header>
+</nav>

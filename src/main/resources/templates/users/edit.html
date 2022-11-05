@@ -21,8 +21,15 @@
             <div class="form-group col-md-8">
               <label for="email" class="col-form-label">Email</label> <input type="text" th:field="*{email}" class="form-control" id="email" placeholder="Email"> <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
             </div>
+            <div class="form-group col-md-8">
+              <label for="type" class="col-form-label">Is Admin</label>
+              <select class="form-select form-select-sm" id="type" th:field="*{isAdmin}">
+                <option value="0">Angajat</option>
+                <option value="1">Admin</option>
+              </select>
+            </div>
 
-            <div class="col-md-6">
+            <div class="col-md-6 mt-4">
               <input type="submit" class="btn btn-primary" value="Edit User">
             </div>
 
