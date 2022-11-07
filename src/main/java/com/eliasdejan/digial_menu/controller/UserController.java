@@ -25,10 +25,11 @@ public class UserController {
     }
 
     @GetMapping("")
-    public String showUpdateForm(Model model) {
-        model.addAttribute("users", userRepository.findAll());
-        model.addAttribute("User", new User());
-        return "users/index";
+    public String showIndex(Model model) {
+        // aceasta este functia care raspunde la /users/ si afiseaza o lista cu userii.
+        model.addAttribute("users", userRepository.findAll()); //transmite pe frontend o lista cu toti userii prin variabila users
+        model.addAttribute("User", new User()); //transmite pe frontend un user nou in caz ca se doreste crearea unui nou user
+        return "users/index"; // se returneaza pagina users/index
     }
 
     @PostMapping("/add")

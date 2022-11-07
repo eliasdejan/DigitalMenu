@@ -25,7 +25,7 @@ public class MenuItemController {
     }
 
     @GetMapping("")
-    public String showUpdateForm(Model model) {
+    public String showIndex(Model model) {
         model.addAttribute("menuItems", menuItemRepository.findAll());
         model.addAttribute("MenuItem", new MenuItem());
         model.addAttribute("menuItemTypes", menuItemTypeRepository.findAll());

@@ -61,6 +61,7 @@
                 <th scope="col">Actions</th>
             </tr>
         </thead>
+        <!-- Pentru fiecare user se face un rand nou unde se afiseaza detaliile corespunzatoare detaliilor din antetul tabelului alaturi de optiunea de a edita sau sterge acel user -->
         <tr th:each="user: ${users}">
             <td th:text="${user.id}" />
             <td th:text="${user.firstName}" />
