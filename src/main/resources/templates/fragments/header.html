@@ -20,6 +20,11 @@
         <li class="nav-item">
           <a th:href="@{/menu-item-types}" class="nav-link">Menu Item Types</a>
         </li>
+        <li>
+          <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Logout" class="btn btn-primary">
+          </form>
+        </li>
       </ul>
     </div>
   </div>
