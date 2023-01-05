@@ -5,6 +5,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "menu_items")
@@ -25,6 +26,9 @@ public class MenuItem {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private MenuItemType menuItemType;
+
+    @OneToMany(mappedBy = "menuItem")
+    Set<MenuItemOrder> menuItemOrders;
 
     public void setId(Integer id) {
         this.id = id;
@@ -56,5 +60,13 @@ public class MenuItem {
 
     public void setMenuItemType(MenuItemType menuItemType) {
         this.menuItemType = menuItemType;
+    }
+
+    public Set<MenuItemOrder> getMenuItemOrders() {
+        return menuItemOrders;
+    }
+
+    public void setMenuItemOrders(Set<MenuItemOrder> menuItemOrders) {
+        this.menuItemOrders = menuItemOrders;
     }
 }

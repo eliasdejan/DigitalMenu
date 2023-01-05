@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Digital Menu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500;700&family=Smooch&display=swap" rel="stylesheet">
+    <link rel="stylesheet"  href="/style.css">
+</head>
+<body>
+<form>
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+</form>
+<div>
+    <nav class="navbar navbar-expand-md navbar-dark mb-5">
+        <div class="container-fluid">
+            <a class="navbar-brand d-md-none" href="#">
+                Digital Menu
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <a class="navbar-brand d-none d-md-block" href="#">
+                        Digital Menu
+                    </a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="shoppingCartDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Shooping Cart
+                        </a>
+                        <ul class="dropdown-menu dropdown-large" aria-labelledby="shoppingCartDropdown" id="shoppingCartDropdownList">
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="container">
+    <div>
+        <h2 class="pb-2 float-start">Menu Items</h2>
+        <div class="row col-12">
+            <div class="card shadow-sm col-12 col-md-6 item-card p-2" th:each="menuItem: ${menuItems}" th:data-id="${menuItem.id}">
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                <div class="card-body">
+                    <p class="card-text" th:data-name="${menuItem.name}" th:text="${menuItem.name}" />
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <b th:data-price="${menuItem.price}" th:text="${menuItem.price} + ' lei'" />
+                            <b th:text="${menuItem.menuItemType.name}" />
+                            <button type="button" class="btn btn-sm btn-outline-secondary" th:onclick="'addItemToCart(' + ${menuItem.id} + ')'">Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="fixed-bottom">
+    <div class="text-center">
+        <div class="container text-center">
+            <p>&copy; Digital Menu </p>
+        </div>
+    </div>
+</footer>
+
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+<script>
+    var shoppingCart = [];
+    function addItemToCart(menuItemId) {
+        // add element to shopping cart if it doesn't exist else increment quantity
+        var menuItemOrder = shoppingCart.find(menuItemOrder => menuItemOrder.menuItem.id === menuItemId);
+        var menuItem;
+
+        if (menuItemOrder) {
+            menuItemOrder.quantity++;
+        } else {
+            menuItem = {
+                id: menuItemId,
+                name: $('.item-card[data-id="' + menuItemId + '"] [data-name] ').text(),
+                price: $('.item-card[data-id="' + menuItemId + '"] [data-price]').text().slice(0, -4),
+            };
+
+            let menuItemOrder = {
+                menuItem: menuItem,
+                quantity: 1
+            };
+
+            shoppingCart.push(menuItemOrder);
+        }
+
+        updateShoppingCart();
+    }
+
+    function removeItemFromCart(menuItemId) {
+        shoppingCart = shoppingCart.filter(menuItemOrder => menuItemOrder.menuItem.id !== menuItemId);
+        updateShoppingCart();
+    }
+
+    function updateShoppingCartFooter(){
+        if (shoppingCart.length === 0) return;
+
+        let totalPrice = 0;
+        shoppingCart.forEach(function (menuItemOrder) {
+            totalPrice += parseFloat(menuItemOrder.menuItem.price) * menuItemOrder.quantity;
+        });
+
+        $('#shoppingCartDropdownList').append('<li class="dropdown-item"><b>Total price: ' + totalPrice + ' lei</b></li>');
+
+        $('#shoppingCartDropdownList').append('<li class="dropdown-item"><button type="button" class="btn btn-sm btn-outline-secondary" onclick="order()">Order</button></li>');
+    }
+
+    function order(){
+        var csrfToken = $('input[name="_csrf"]').val();
+
+        $.ajax({
+            url: "/orders/add",
+            type: 'POST',
+            data: JSON.stringify(shoppingCart),
+            contentType: 'application/json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+            },
+            success: function (data) {
+                shoppingCart = [];
+                updateShoppingCart();
+            }
+        });
+    }
+
+    function updateShoppingCart() {
+        var shoppingCartDropdown = $('#shoppingCartDropdownList');
+        shoppingCartDropdown.empty();
+        $.each(shoppingCart, function (k, menuItemOrder) {
+            let menuItem = menuItemOrder['menuItem'];
+            shoppingCartDropdown.append('<li><div href="#">' + menuItem.name + ' - ' + menuItem.price + '-' + menuItemOrder.quantity + '<span class="text-danger" onclick="removeItemFromCart(' + menuItem.id + ')">Delete</span></div></li>');
+        });
+        updateShoppingCartFooter();
+    }
+
+</script>
+
+</body>
+</html>

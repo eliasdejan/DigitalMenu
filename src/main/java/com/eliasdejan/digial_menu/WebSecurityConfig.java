@@ -53,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/menu-item-types/edit").authenticated()
                 .antMatchers("/menu-items/index").authenticated()
                 .antMatchers("/menu-items/edit").authenticated()
-                .antMatchers("/orders/manage").authenticated()
+                .antMatchers("/orders/index").authenticated()
                 .antMatchers("/users/index").authenticated()
                 .antMatchers("/users/edit").authenticated()
                 .anyRequest().permitAll()
