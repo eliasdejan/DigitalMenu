@@ -49,14 +49,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                .antMatchers("/menu-item-types/index").authenticated()
+                .antMatchers("/menu-item-types/edit").authenticated()
+                .antMatchers("/menu-items/index").authenticated()
+                .antMatchers("/menu-items/edit").authenticated()
+                .antMatchers("/orders/manage").authenticated()
                 .antMatchers("/users/index").authenticated()
+                .antMatchers("/users/edit").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
                     .usernameParameter("email")
-                    .usernameParameter("/users/index")
+                    .defaultSuccessUrl("/users/index")
                     .permitAll()
                 .and()
-                .logout().logoutSuccessUrl("/users/login").permitAll();
+                .logout().logoutSuccessUrl("/login").permitAll();
     }
 }

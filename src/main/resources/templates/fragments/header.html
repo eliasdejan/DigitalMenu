@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-dark mb-5">
   <div class="container-fluid">
     <a class="navbar-brand d-md-none" href="#">
-      <img src="https://codingyaar.com/wp-content/uploads/logo-1.png" alt="">
+      Digital Menu
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -21,9 +21,16 @@
           <a th:href="@{/menu-item-types}" class="nav-link">Menu Item Types</a>
         </li>
         <li>
-          <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Logout" class="btn btn-primary">
-          </form>
+          <a class="nav-link mx-2 dropdown-toggle text-dark" href="#" id="navbarDropdownMenuLink1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            [[${#request.userPrincipal.principal.fullName}]]
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item">
+              <form th:action="@{/logout}" method="post">
+                <input class="btn btn-secondary" type="submit" value="Sign Out">
+              </form>
+            </a></li>
+          </ul>
         </li>
       </ul>
     </div>
