@@ -52,4 +52,12 @@ public class CustomUserDetails implements UserDetails {
         return user.getFirstName()+" "+user.getLastName();
     }
 
+    public boolean getIsAdmin() {
+        return user.getIsAdmin();
+    }
+
+    public int getUserId() {
+        return user.getId();
+    }
+
 }

@@ -2,28 +2,41 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/layout}">
 <head>
-    <title>Menu</title>
+    <title>Orders</title>
 </head>
 <body>
 <div layout:fragment="content">
-    <h2 class="pb-2 float-start">Menu Items</h2>
     <div class="row col-12">
-        <div class="card shadow-sm col-12 col-md-6 item-card p-2" th:each="order: ${orders}">
+
+        <h2>New orders</h2>
+        <div class="card shadow-sm col-12 col-md-3 item-card p-2" th:each="newOrder: ${newOrders}">
             <div class="card-body">
-                <p class="card-text" th:text="${order.id}" />
+                <h2 class="card-text mb-2" th:text="${newOrder.id}" />
                 <ul>
-                    <li th:each="menuItemOrder: ${order.menuItemOrders}" th:text="${menuItemOrder.menuItem.name + ' : ' + menuItemOrder.quantity}"></li>
+                    <li th:each="menuItemOrder: ${newOrder.menuItemOrders}" th:text="${menuItemOrder.menuItem.name + ' : ' + menuItemOrder.quantity}"></li>
                 </ul>
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
-                        <form th:action="@{/orders/finish/{id}(id=${order.id})}" method="post">
-                            <input type="hidden" name="order_id" th:value="${order.id}">
-                            <input type="submit" name="submit_btn" value="Mark as Finished" />
+                        <form th:action="@{/orders/finish/{id}(id=${newOrder.id})}" method="post">
+                            <input type="hidden" name="order_id" th:value="${newOrder.id}">
+                            <input type="submit" name="submit_btn" class="btn btn-primary btn-sm" value="Mark as Finished" />
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+
+        <h2 class="mt-5">Finished orders</h2>
+        <div class="card shadow-sm col-12 col-md-3 item-card p-2" th:each="finishedOrder: ${finishedOrders}">
+            <div class="card-body">
+                <h2 class="card-text mb-2" th:text="${finishedOrder.id}" />
+                <ul>
+                    <li th:each="menuItemOrder: ${finishedOrder.menuItemOrders}" th:text="${menuItemOrder.menuItem.name + ' : ' + menuItemOrder.quantity}"></li>
+                </ul>
+                <div th:text="${'Finished At:' + finishedOrder.getFinishedTime()}" />
+            </div>
+        </div>
+
     </div>
 </div>
 </body>

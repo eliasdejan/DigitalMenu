@@ -55,13 +55,13 @@ public class OrderController {
     @GetMapping("/orders")
     public String showOrders(Model model) {
         model.addAttribute("message", model.asMap().get("message"));
-        model.addAttribute("orders", orderRepository.findAll());
+        model.addAttribute("newOrders", orderRepository.findAllNotFinished());
+        model.addAttribute("finishedOrders", orderRepository.findAllFinished());
         return "orders/index";
     }
 
     @PostMapping("/orders/add")
     public ResponseEntity<String> addOrder(@RequestBody Set<MenuItemOrder> menuItemOrders, RedirectAttributes redirectAttributes) throws JsonProcessingException {
-
         Order order = new Order();
         order.setCreationTime(LocalDateTime.now());
         order.setFinishedTime(null);

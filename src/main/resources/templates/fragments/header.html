@@ -9,28 +9,28 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mx-auto">
         <li class="nav-item">
-          <a th:href="@{/users}" class="nav-link">Users</a>
+          <a th:href="@{/users}" th:if="${#request.userPrincipal.principal.isAdmin}" class="nav-link">Users</a>
         </li>
         <li class="nav-item">
-          <a th:href="@{/menu-items}" class="nav-link">Menu</a>
+          <a th:href="@{/orders}" class="nav-link">Orders</a>
+        </li>
+        <li class="nav-item">
+          <a th:href="@{/menu-items}" th:if="${#request.userPrincipal.principal.isAdmin}" class="nav-link">Menu</a>
         </li>
         <a class="navbar-brand d-none d-md-block" href="#">
           Digital Menu
         </a>
         <li class="nav-item">
-          <a th:href="@{/menu-item-types}" class="nav-link">Menu Item Types</a>
+          <a th:href="@{/menu-item-types}" th:if="${#request.userPrincipal.principal.isAdmin}" class="nav-link">Menu Item Types</a>
         </li>
-        <li>
-          <a class="nav-link mx-2 dropdown-toggle text-dark" href="#" id="navbarDropdownMenuLink1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <li class="nav-item dropdown">
+          <a class="nav-link mx-2 dropdown-toggle text-dark" href="#" id="userNavDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             [[${#request.userPrincipal.principal.fullName}]]
           </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item">
-              <form th:action="@{/logout}" method="post">
-                <input class="btn btn-secondary" type="submit" value="Sign Out">
-              </form>
-            </a></li>
-          </ul>
+          <div class="dropdown-menu" aria-labelledby="userNavDropdown">
+              <a th:href="@{/users/edit/{id}(id=${#request.userPrincipal.principal.userId})}" class="dropdown-item">Edit profile</a>
+              <a th:href="@{/logout}" class="dropdown-item">Logout</a>
+          </div>
         </li>
       </ul>
     </div>
