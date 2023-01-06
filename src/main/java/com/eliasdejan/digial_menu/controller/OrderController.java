@@ -7,19 +7,22 @@ import com.eliasdejan.digial_menu.repository.MenuItemOrderRepository;
 import com.eliasdejan.digial_menu.repository.MenuItemRepository;
 import com.eliasdejan.digial_menu.repository.MenuItemTypeRepository;
 import com.eliasdejan.digial_menu.repository.OrderRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -45,17 +48,19 @@ public class OrderController {
         model.addAttribute("menuItems", menuItemRepository.findAll());
         model.addAttribute("MenuItem", new MenuItem());
         model.addAttribute("menuItemTypes", menuItemTypeRepository.findAll());
+        model.addAttribute("message", model.asMap().get("message"));
         return "orders/menu";
     }
 
     @GetMapping("/orders")
     public String showOrders(Model model) {
+        model.addAttribute("message", model.asMap().get("message"));
         model.addAttribute("orders", orderRepository.findAll());
         return "orders/index";
     }
 
     @PostMapping("/orders/add")
-    public ResponseEntity<String> addOrder(@RequestBody Set<MenuItemOrder> menuItemOrders) {
+    public ResponseEntity<String> addOrder(@RequestBody Set<MenuItemOrder> menuItemOrders, RedirectAttributes redirectAttributes) throws JsonProcessingException {
 
         Order order = new Order();
         order.setCreationTime(LocalDateTime.now());
@@ -67,7 +72,16 @@ public class OrderController {
             menuItemOrderRepository.save(menuItemOrder);
         }
 
-        return ResponseEntity.ok("Order added");
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("success", true);
+        map.put("id", order.getId());
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(map);
+
+        // add success = true to answer
+        return ResponseEntity.ok(json);
     }
 
     @PostMapping("/orders/finish/{id}")

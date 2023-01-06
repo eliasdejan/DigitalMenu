@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
@@ -26,6 +27,7 @@ public class MenuItemController {
 
     @GetMapping("")
     public String showIndex(Model model) {
+        model.addAttribute("message", model.asMap().get("message"));
         model.addAttribute("menuItems", menuItemRepository.findAll());
         model.addAttribute("MenuItem", new MenuItem());
         model.addAttribute("menuItemTypes", menuItemTypeRepository.findAll());
@@ -34,42 +36,45 @@ public class MenuItemController {
     }
 
     @PostMapping("/add")
-    public String addMenuItem(@Valid MenuItem menuItem, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "menu-items";
-        }
-
+    public String addMenuItem(@Valid MenuItem menuItem, BindingResult result, Model model,  RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {return "menu-items";}
         menuItemRepository.save(menuItem);
+        redirectAttributes.addFlashAttribute("message", "Item was added!");
         return "redirect:/menu-items";
     }
 
     @GetMapping("/edit/{id}")
     public String showUpdateForm(@PathVariable("id") long id, Model model) {
+        model.addAttribute("message", model.asMap().get("message"));
         MenuItem menuItem = menuItemRepository.findById((int) id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid menu item Id:" + id));
         model.addAttribute("menuItem", menuItem);
+
+        model.addAttribute("message", model.asMap().get("message"));
         model.addAttribute("menuItemTypes", menuItemTypeRepository.findAll());
         return "/menu-items/edit";
     }
 
     @PostMapping("/edit/{id}")
     public String updateMenuItem(@PathVariable("id") long id, @Valid MenuItem menuItem, BindingResult result,
-                                Model model) {
+                                Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             menuItem.setId((int) id);
             return "/menu-items/edit/"+id;
         }
 
         menuItemRepository.save(menuItem);
+        redirectAttributes.addFlashAttribute("message", "Item was edited!");
         model.addAttribute("menuItems", menuItemRepository.findAll());
         return "redirect:/menu-items";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteMenuItem(@PathVariable("id") long id, Model model) {
+    public String deleteMenuItem(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
         MenuItem menuItem = menuItemRepository.findById((int) id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid menu item Id:" + id));
         menuItemRepository.delete(menuItem);
+        redirectAttributes.addFlashAttribute("message", "Item was deleted!");
         return "redirect:/menu-items";
     }
 

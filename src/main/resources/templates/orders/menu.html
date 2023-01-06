@@ -41,6 +41,7 @@
 </div>
 
 <div class="container">
+    <div th:insert="fragments/flash"></div>
     <div>
         <h2 class="pb-2 float-start">Menu Items</h2>
         <div class="row col-12">
@@ -72,6 +73,7 @@
 <!-- JavaScript Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     var shoppingCart = [];
@@ -130,8 +132,21 @@
                 xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
             },
             success: function (data) {
+                data = JSON.parse(data);
+                Swal.fire({
+                    icon: 'sueccess',
+                    title: 'The order was created!',
+                    text: 'Your order number is ' + data.id,
+                })
                 shoppingCart = [];
                 updateShoppingCart();
+            },
+            error: function (data){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                })
             }
         });
     }

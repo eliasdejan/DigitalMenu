@@ -49,18 +49,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/menu-item-types/index").authenticated()
+                .antMatchers("/menu-item-types").authenticated()
                 .antMatchers("/menu-item-types/edit").authenticated()
-                .antMatchers("/menu-items/index").authenticated()
+                .antMatchers("/menu-items").authenticated()
                 .antMatchers("/menu-items/edit").authenticated()
-                .antMatchers("/orders/index").authenticated()
-                .antMatchers("/users/index").authenticated()
+                .antMatchers("/orders").authenticated()
+                .antMatchers("/users").authenticated()
                 .antMatchers("/users/edit").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
                     .usernameParameter("email")
-                    .defaultSuccessUrl("/users/index")
+                    .defaultSuccessUrl("/users")
                     .permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/login").permitAll();
