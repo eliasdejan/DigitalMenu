@@ -15,7 +15,8 @@
                 <ul>
                     <li th:each="menuItemOrder: ${newOrder.menuItemOrders}" th:text="${menuItemOrder.menuItem.name + ' : ' + menuItemOrder.quantity}"></li>
                 </ul>
-                <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted" th:text="${newOrder.getTotalPrice()} + ' lei'"></small>
+                <div class="d-flex mt-2 justify-content-between align-items-center">
                     <div class="btn-group">
                         <form th:action="@{/orders/finish/{id}(id=${newOrder.id})}" method="post">
                             <input type="hidden" name="order_id" th:value="${newOrder.id}">

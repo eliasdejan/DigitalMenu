@@ -8,6 +8,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500;700&family=Smooch&display=swap" rel="stylesheet">
     <link rel="stylesheet"  href="/style.css">
+    <style>
+        .dropdown-menu{
+            min-width: 500px;
+        }
+    </style>
 </head>
 <body>
 <form>
@@ -24,12 +29,15 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a th:href="@{/login}" class="nav-link">Login</a>
+                    </li>
                     <a class="navbar-brand d-none d-md-block" href="#">
                         Digital Menu
                     </a>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="shoppingCartDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Shooping Cart
+                            Shopping Cart
                         </a>
                         <ul class="dropdown-menu dropdown-large" aria-labelledby="shoppingCartDropdown" id="shoppingCartDropdownList">
                         </ul>
@@ -43,22 +51,30 @@
 <div class="container">
     <div th:insert="fragments/flash"></div>
     <div>
-        <h2 class="pb-2 float-start">Menu Items</h2>
-        <div class="row col-12">
-            <div class="card shadow-sm col-12 col-md-6 item-card p-2" th:each="menuItem: ${menuItems}" th:data-id="${menuItem.id}">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="card-body">
-                    <p class="card-text" th:data-name="${menuItem.name}" th:text="${menuItem.name}" />
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                            <b th:data-price="${menuItem.price}" th:text="${menuItem.price} + ' lei'" />
-                            <b th:text="${menuItem.menuItemType.name}" />
-                            <button type="button" class="btn btn-sm btn-outline-secondary" th:onclick="'addItemToCart(' + ${menuItem.id} + ')'">Order</button>
+        <h1 class="text-danger">Menu</h1>
+        <h5 class="pb-2 col-12 float-start my-2" th:text="'There are '+ ${#lists.size(menuItems)} + ' available items:'"></h5>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <div class="col" th:each="menuItem: ${menuItems}" th:data-id="${menuItem.id}">
+                <div class="card shadow-sm">
+                    <img th:src="@{/upload/{imagePath}(imagePath=${menuItem.imagePath})}" class="card-img-top" alt="...">
+
+                    <div class="card-body">
+                        <div class="float-start"></div>
+                        <h2 class="card-text text-danger mb-3" th:data-name="${menuItem.name}" th:text="${menuItem.name}"></h2>
+                        <p class="card-text text-muted" th:data-description="${menuItem.description}" th:text="${menuItem.description}"></p>
+                        <span class="badge text-dark bg-warning" th:text="${menuItem.menuItemType.name}"></span>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-danger" th:onclick="'addItemToCart(' + ${menuItem.id} + ')'">Order</button>
+                            </div>
+                            <h4 class="text-danger" th:data-price="${menuItem.price}" th:text="${menuItem.price} + ' lei'"></h4>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
+
     </div>
 </div>
 
@@ -87,8 +103,9 @@
         } else {
             menuItem = {
                 id: menuItemId,
-                name: $('.item-card[data-id="' + menuItemId + '"] [data-name] ').text(),
-                price: $('.item-card[data-id="' + menuItemId + '"] [data-price]').text().slice(0, -4),
+                name: $('.col[data-id="' + menuItemId + '"] [data-name] ').text(),
+                price: $('.col[data-id="' + menuItemId + '"] [data-price]').text().slice(0, -4),
+                description: $('.col[data-id="' + menuItemId + '"] [data-description]').text().slice(0, -4),
             };
 
             let menuItemOrder = {
@@ -156,7 +173,7 @@
         shoppingCartDropdown.empty();
         $.each(shoppingCart, function (k, menuItemOrder) {
             let menuItem = menuItemOrder['menuItem'];
-            shoppingCartDropdown.append('<li><div href="#">' + menuItem.name + ' - ' + menuItem.price + '-' + menuItemOrder.quantity + '<span class="text-danger" onclick="removeItemFromCart(' + menuItem.id + ')">Delete</span></div></li>');
+            shoppingCartDropdown.append('<li><div class="ms-2">' + menuItem.name + ' - ' + menuItem.price + ' x' + menuItemOrder.quantity + '<span class="text-danger" onclick="removeItemFromCart(' + menuItem.id + ')"> Delete</span></div></li>');
         });
         updateShoppingCartFooter();
     }

@@ -31,6 +31,10 @@
                                         th:utext="${it.name}"/>
                             </select>
                         </div>
+                        <div class="mb-3">
+                            <label for="descriptionField" class="form-label">Description</label>
+                            <textarea class="form-control" placeholder="Description" id="descriptionField" th:field="*{description}" required></textarea>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">

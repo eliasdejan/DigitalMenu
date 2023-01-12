@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/form_layout}">
+<head>
+    <title>Logout</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h3>Logout</h3>
+    <div class="card">
+        <div class="card-body">
+            <div class="col-md-10">
+                <form method="post" th:action="@{/login}">
+                    <h2>Are you sure you want to log out?</h2>
+                    <input type="submit" class="btn btn-danger" value="Logout" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

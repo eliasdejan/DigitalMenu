@@ -6,28 +6,25 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <h3>Login</h3>
-    <div class="card">
-        <div class="card-body">
-            <div class="col-md-10">
-                <form method="post" th:action="@{/users/register}" th:object="${User}" id="addUserForm">
-                    <div class="mb-3">
-                        <label for="emailField" class="form-label">Email address</label>
-                        <input type="email" class="form-control" placeholder="Email" id="emailField" th:field="*{email}" aria-describedby="emailHelp" required>
-                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="passwordField" class="form-label">Password</label>
-                        <input type="password" class="form-control" placeholder="Password" id="passwordField" th:field="*{password}" required>
-                    </div>
-                    <div class="col-md-6 mt-4">
-                        <input type="submit" class="btn btn-primary" value="Login">
-                    </div>
-
-                </form>
-            </div>
+    <form method="post" th:action="@{/login}">
+        <h3>Login</h3>
+        <div th:if="${param.error}">
+            <div class="alert alert-danger" role="alert">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</div>
         </div>
-    </div>
+        <div class="mb-3">
+            <label for="emailField" class="form-label">Email address</label>
+            <input type="email" class="form-control" placeholder="Email" name="email" id="emailField" aria-describedby="emailHelp" required>
+        </div>
+        <div class="mb-3">
+            <label for="passwordField" class="form-label">Password</label>
+            <input type="password" class="form-control" placeholder="Password" name="password" id="passwordField" required>
+        </div>
+        <div class="col-md-6 mt-4 mb-3">
+            <input type="submit" value="Login" class="btn btn-primary">
+        </div>
+        <small class="text-muted">If you don't have an account you can register <a href="/register">here</a>.</small>
+
+    </form>
 </div>
 </body>
 

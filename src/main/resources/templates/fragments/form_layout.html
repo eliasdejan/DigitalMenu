@@ -8,16 +8,28 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500;700&family=Smooch&display=swap" rel="stylesheet">
   <link rel="stylesheet"  href="/style.css">
+  <style>
+    html,
+    body {
+      height: 100%;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      padding-top: 40px;
+      padding-bottom: 40px;
+    }
+  </style>
 </head>
 <body>
 
 <div th:insert="fragments/flash"></div>
 
-<div class="container">
-  <div layout:fragment="content">
+
+<main class="form-signin" layout:fragment="content">
     <p>Body contents</p>
-  </div>
-</div>
+</main>
+
 
 <footer th:insert="fragments/footer" class="fixed-bottom">
 </footer>

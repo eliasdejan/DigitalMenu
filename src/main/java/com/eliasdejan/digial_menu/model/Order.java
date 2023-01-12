@@ -24,6 +24,14 @@ public class Order {
     @OneToMany(mappedBy = "order")
     Set<MenuItemOrder> menuItemOrders;
 
+    public double getTotalPrice() {
+        double totalPrice = 0;
+        for (MenuItemOrder item : menuItemOrders) {
+            totalPrice += item.getQuantity() * item.getMenuItem().getPrice();
+        }
+        return totalPrice;
+    }
+
     public Integer getId() {
         return id;
     }

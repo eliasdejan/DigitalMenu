@@ -29,8 +29,22 @@ public class MainController {
         if (bindingResult.hasErrors()) {
             return "users/register";
         }
-        user.setIsAdmin(false);
+
+        boolean isAdmin = userRepository.count() == 0;
+
+        user.setIsAdmin(isAdmin);
         userRepository.save(user);
+
         return "redirect:/users";
+    }
+
+    @GetMapping("/login")
+    public String viewLoginPage() {
+        return "users/login";
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "users/logout";
     }
 }

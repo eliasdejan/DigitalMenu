@@ -4,22 +4,30 @@ import com.eliasdejan.digial_menu.model.CustomUserDetails;
 import com.eliasdejan.digial_menu.model.MenuItem;
 import com.eliasdejan.digial_menu.repository.MenuItemRepository;
 import com.eliasdejan.digial_menu.repository.MenuItemTypeRepository;
+import com.eliasdejan.digial_menu.services.MenuItemsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/menu-items")
 public class MenuItemController {
 
+    public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/uploads";
+
     private final MenuItemRepository menuItemRepository;
     private final MenuItemTypeRepository menuItemTypeRepository;
+
+    @Autowired
+    private MenuItemsService menuItemsService;
 
     @Autowired
     public MenuItemController(MenuItemRepository menuItemRepository, MenuItemTypeRepository menuItemTypeRepository) {
@@ -54,6 +62,9 @@ public class MenuItemController {
         }
 
         if (result.hasErrors()) {return "menu-items";}
+
+        menuItem.setImagePath("");
+
         menuItemRepository.save(menuItem);
         redirectAttributes.addFlashAttribute("message", "Item was added!");
         return "redirect:/menu-items";
@@ -90,7 +101,15 @@ public class MenuItemController {
             return "/menu-items/edit/"+id;
         }
 
-        menuItemRepository.save(menuItem);
+        MenuItem existingMenuItem = menuItemRepository.findById((int) id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid menu item Id:" + id));
+
+        existingMenuItem.setName(menuItem.getName());
+        existingMenuItem.setPrice(menuItem.getPrice());
+        existingMenuItem.setMenuItemType(menuItem.getMenuItemType());
+        existingMenuItem.setDescription(menuItem.getDescription());
+
+        menuItemRepository.save(existingMenuItem);
         redirectAttributes.addFlashAttribute("message", "Item was edited!");
         model.addAttribute("menuItems", menuItemRepository.findAll());
         return "redirect:/menu-items";
@@ -111,4 +130,14 @@ public class MenuItemController {
         return "redirect:/menu-items";
     }
 
+    @PostMapping("/upload")
+    public String handleFileUpload(@RequestParam("file") MultipartFile file,
+                                   @RequestParam("id") int id) throws IOException {
+
+        // Save the file to disk
+        // and store the file path in the database
+        menuItemsService.saveFile(file, id);
+
+        return "redirect:/menu-items";
+    }
 }

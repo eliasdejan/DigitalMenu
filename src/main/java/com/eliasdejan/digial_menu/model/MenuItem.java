@@ -18,8 +18,15 @@ public class MenuItem {
     @Column(nullable = false, length = 45)
     private String name;
 
+    @Column(nullable = false, length = 200)
+    private String description;
+
+
     @Column(nullable = false, precision=5, scale=2)
     private double price;
+
+    @Column(name = "image", nullable = false)
+    private String imagePath;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "menu_item_type_id", nullable = false)
@@ -68,5 +75,21 @@ public class MenuItem {
 
     public void setMenuItemOrders(Set<MenuItemOrder> menuItemOrders) {
         this.menuItemOrders = menuItemOrders;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
