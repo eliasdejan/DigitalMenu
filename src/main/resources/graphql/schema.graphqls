@@ -1,0 +1,18 @@
+type Query{
+    menuItems: [MenuItem]
+    menuItemsByMenuItemTypeId(menuItemTypeId: ID!): [MenuItem]
+}
+
+type MenuItem{
+    id: ID!
+    name: String!
+    price: Float!
+    description: String!
+    imagePath: String
+    menuItemType: MenuItemType!
+}
+
+type MenuItemType{
+    id: ID!
+    name: String!
+}

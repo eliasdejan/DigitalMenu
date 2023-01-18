@@ -52,29 +52,21 @@
     <div th:insert="fragments/flash"></div>
     <div>
         <h1 class="text-danger">Menu</h1>
-        <h5 class="pb-2 col-12 float-start my-2" th:text="'There are '+ ${#lists.size(menuItems)} + ' available items:'"></h5>
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            <div class="col" th:each="menuItem: ${menuItems}" th:data-id="${menuItem.id}">
-                <div class="card shadow-sm">
-                    <img th:src="@{/upload/{imagePath}(imagePath=${menuItem.imagePath})}" class="card-img-top" alt="...">
-
-                    <div class="card-body">
-                        <div class="float-start"></div>
-                        <h2 class="card-text text-danger mb-3" th:data-name="${menuItem.name}" th:text="${menuItem.name}"></h2>
-                        <p class="card-text text-muted" th:data-description="${menuItem.description}" th:text="${menuItem.description}"></p>
-                        <span class="badge text-dark bg-warning" th:text="${menuItem.menuItemType.name}"></span>
-                        <div class="d-flex justify-content-between align-items-center mt-2">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-danger" th:onclick="'addItemToCart(' + ${menuItem.id} + ')'">Order</button>
-                            </div>
-                            <h4 class="text-danger" th:data-price="${menuItem.price}" th:text="${menuItem.price} + ' lei'"></h4>
-                        </div>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="col-10">
+                <h5 class="pb-2 col-12 float-start my-2" th:text="'There are '+ ${#lists.size(menuItems)} + ' items in total.'"></h5>
             </div>
-
+            <div class="col-2">
+                <select id="menuItemTypeSelector" onchange="getMenuItems()" class="form-select form-select-sm mb-3">
+                    <option value="0">select option</option>
+                    <option th:each="menuItemType : ${menuItemTypes}" th:value="${menuItemType.getId()}" th:text="${menuItemType.getName()}"></option>
+                </select>
+            </div>
         </div>
 
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="menuItemsContainer">
+
+        </div>
     </div>
 </div>
 
@@ -92,6 +84,7 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+    const  csrfToken = $('input[name="_csrf"]').val();
     var shoppingCart = [];
     function addItemToCart(menuItemId) {
         // add element to shopping cart if it doesn't exist else increment quantity
@@ -138,8 +131,6 @@
     }
 
     function order(){
-        var csrfToken = $('input[name="_csrf"]').val();
-
         $.ajax({
             url: "/orders/add",
             type: 'POST',
@@ -176,6 +167,65 @@
             shoppingCartDropdown.append('<li><div class="ms-2">' + menuItem.name + ' - ' + menuItem.price + ' x' + menuItemOrder.quantity + '<span class="text-danger" onclick="removeItemFromCart(' + menuItem.id + ')"> Delete</span></div></li>');
         });
         updateShoppingCartFooter();
+    }
+
+    $(document).ready(function () {
+        getMenuItems();
+    });
+
+    function getMenuItems(){
+
+        let query = '{menuItems {id name description price imagePath menuItemType {name}}}';
+
+        let menuItemTypeId = $('#menuItemTypeSelector option:selected').val();
+        if(menuItemTypeId !== '0') query = '{menuItemsByMenuItemTypeId(menuItemTypeId: '+ menuItemTypeId+') {id name description price imagePath menuItemType{name}}}';
+
+        $.ajax({
+            url: "/graphql",
+            type: 'POST',
+            data: JSON.stringify({
+                query: query,
+            }),
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+            },
+            contentType: 'application/json',
+            success: function (data) {
+                let menuItems = Object.values(data.data)[0];
+                let menuItemsContainer = $('#menuItemsContainer');
+                menuItemsContainer.empty();
+                $.each(menuItems, function (k, menuItem) {
+                    let menuItemType = menuItem.menuItemType;
+                    let menuItemTypeName = menuItemType.name;
+                    let menuItemImage = menuItem.imagePath;
+                    let menuItemName = menuItem.name;
+                    let menuItemDescription = menuItem.description;
+                    let menuItemPrice = menuItem.price;
+                    let menuItemId = menuItem.id;
+
+                    let menuItemHtml = '<div class="col" data-id="'+ menuItemId +'">\n' +
+                        '                <div class="card shadow-sm">\n' +
+                        '                    <img src="/upload/'+menuItemImage+'" class="card-img-top" alt="...">\n' +
+                        '\n' +
+                        '                    <div class="card-body">\n' +
+                        '                        <div class="float-start"></div>\n' +
+                        '                        <h2 class="card-text text-danger mb-3" data-name="'+menuItemName+'">'+menuItemName+'</h2>\n' +
+                        '                        <p class="card-text text-muted" data-description="'+menuItemDescription+'" >'+menuItemDescription+'</p>\n' +
+                        '                        <span class="badge text-dark bg-warning">'+menuItemTypeName+'</span>\n' +
+                        '                        <div class="d-flex justify-content-between align-items-center mt-2">\n' +
+                        '                            <div class="btn-group">\n' +
+                        '                                <button type="button" class="btn btn-danger" onclick="addItemToCart('+menuItemId+')">Order</button>\n' +
+                        '                            </div>\n' +
+                        '                            <h4 class="text-danger" data-price="'+menuItemPrice+'">'+menuItemPrice+' lei</h4>\n' +
+                        '                        </div>\n' +
+                        '                    </div>\n' +
+                        '                </div>\n' +
+                        '            </div>';
+
+                    menuItemsContainer.append(menuItemHtml);
+                });
+            }
+        });
     }
 
 </script>

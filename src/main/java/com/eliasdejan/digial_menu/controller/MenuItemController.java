@@ -6,6 +6,8 @@ import com.eliasdejan.digial_menu.repository.MenuItemRepository;
 import com.eliasdejan.digial_menu.repository.MenuItemTypeRepository;
 import com.eliasdejan.digial_menu.services.MenuItemsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,7 +56,6 @@ public class MenuItemController {
 
     @PostMapping("/add")
     public String addMenuItem(@Valid MenuItem menuItem, BindingResult result, Model model,  RedirectAttributes redirectAttributes) {
-
         CustomUserDetails loggedInUser = (CustomUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(!loggedInUser.getIsAdmin()){
             redirectAttributes.addFlashAttribute("message", "You are not allowed to add menu items!");
@@ -139,5 +140,15 @@ public class MenuItemController {
         menuItemsService.saveFile(file, id);
 
         return "redirect:/menu-items";
+    }
+
+    @QueryMapping
+    Iterable<MenuItem> menuItems(){
+        return menuItemRepository.findAll();
+    }
+
+    @QueryMapping
+    Iterable<MenuItem> menuItemsByMenuItemTypeId(@Argument int menuItemTypeId){
+        return menuItemRepository.findByMenuItemTypeId(menuItemTypeId);
     }
 }
