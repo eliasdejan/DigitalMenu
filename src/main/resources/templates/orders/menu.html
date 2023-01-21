@@ -70,7 +70,7 @@
     </div>
 </div>
 
-<footer class="fixed-bottom">
+<footer class="footer mt-auto py-3">
     <div class="text-center">
         <div class="container text-center">
             <p>&copy; Digital Menu </p>
@@ -84,7 +84,7 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    const  csrfToken = $('input[name="_csrf"]').val();
+    const csrfToken = $('input[name="_csrf"]').val();
     var shoppingCart = [];
     function addItemToCart(menuItemId) {
         // add element to shopping cart if it doesn't exist else increment quantity
@@ -142,10 +142,10 @@
             success: function (data) {
                 data = JSON.parse(data);
                 Swal.fire({
-                    icon: 'sueccess',
+                    icon: 'success',
                     title: 'The order was created!',
                     text: 'Your order number is ' + data.id,
-                })
+                });
                 shoppingCart = [];
                 updateShoppingCart();
             },

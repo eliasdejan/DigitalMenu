@@ -55,8 +55,8 @@ public class OrderController {
     @GetMapping("/orders")
     public String showOrders(Model model) {
         model.addAttribute("message", model.asMap().get("message"));
-        model.addAttribute("newOrders", orderRepository.findAllNotFinished());
-        model.addAttribute("finishedOrders", orderRepository.findAllFinished());
+        model.addAttribute("newOrders", orderRepository.findAllFromTodayNotFinished());
+        model.addAttribute("finishedOrders", orderRepository.findAllFromTodayFinished());
         return "orders/index";
     }
 

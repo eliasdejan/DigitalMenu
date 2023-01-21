@@ -7,9 +7,9 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.ArrayList;
 
 public interface OrderRepository extends CrudRepository<Order, Integer> {
-    @Query("SELECT o FROM Order o WHERE o.finishedTime IS NOT NULL")
-    ArrayList<Order> findAllFinished();
+    @Query("SELECT o FROM Order o WHERE o.finishedTime IS NOT NULL AND date(o.creationTime) = curdate()")
+    ArrayList<Order> findAllFromTodayFinished();
 
-    @Query("SELECT o FROM Order o WHERE o.finishedTime IS NULL")
-    ArrayList<Order> findAllNotFinished();
+    @Query("SELECT o FROM Order o WHERE o.finishedTime IS NULL AND date(o.creationTime) = curdate()")
+    ArrayList<Order> findAllFromTodayNotFinished();
 }
