@@ -21,13 +21,21 @@ public class UserRepositoryTests {
     @Test
     public void testAddNew(){
         User user = new User();
-        user.setEmail("john@yopmail.com");
+        user.setEmail("test@yopmail.com");
         user.setPassword("pass");
         user.setFirstName("john");
         user.setLastName("doe");
         User savedUser = repo.save(user);
         Assertions.assertThat(savedUser).isNotNull();
         Assertions.assertThat(savedUser.getId()).isGreaterThan(0);
+    }
+    @Test
+    public void testFindByEmail(){
+        String email = "test@yopmail.com";
+
+        User user = repo.findByEmail(email);
+
+        Assertions.assertThat(user).isNotNull();
     }
 
     @Test
@@ -44,7 +52,7 @@ public class UserRepositoryTests {
         Integer userId = 1;
         Optional<User> optionalUser = repo.findById(userId);
         User user = optionalUser.get();
-        user.setPassword("new pass");
+        user.setPassword("12345678");
         repo.save(user);
 
         User updatedUser = repo.findById(userId).get();
